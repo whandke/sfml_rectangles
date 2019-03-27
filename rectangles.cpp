@@ -77,6 +77,8 @@ private:
 
 int main()
 {
+
+    std::vector<CustomRectangle*> shapes;
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
     sf::Clock clock;
     std::vector<float> frameTimes;
@@ -106,6 +108,15 @@ int main()
     CustomRectangle square = CustomRectangle(50, 50);
     square.setMovement(300, 50, 270);
     square.setColors(colors);
+
+    CustomRectangle square2 = CustomRectangle(100, 100);
+    square2.setMovement(400, 20, 360);
+    square2.setColors(colors);
+
+    shapes.push_back(&shape);
+    shapes.push_back(&movingRectangle);
+    shapes.push_back(&square);
+    shapes.push_back(&square2);
 
     while (window.isOpen())
     {
@@ -148,15 +159,16 @@ int main()
 
         text.setString("FPS: " + std::to_string(int(fps)));
 
-        shape.update(deltaTime);
-        movingRectangle.update(deltaTime);
-        square.update(deltaTime);
+        for(auto x : shapes){
+            x->update(deltaTime);
+        }
 
         window.clear(clearColor);
-        window.draw(shape);
-        window.draw(movingRectangle);
+
+        for(auto x : shapes){
+            window.draw(*x);
+        }
         window.draw(text);
-        window.draw(square);
         window.display();
 
         while(clock.getElapsedTime().asMilliseconds() < 16.6f){
