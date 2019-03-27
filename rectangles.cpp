@@ -81,6 +81,10 @@ int main()
     sf::Clock clock;
     std::vector<float> frameTimes;
 
+    sf::Color clearBlack = sf::Color(0,0,0);
+    sf::Color clearGray = sf::Color(50,50,50);
+    sf::Color clearColor = clearBlack;
+
     sf::Font font;
     font.loadFromFile("arial.ttf");
 
@@ -108,8 +112,25 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            switch (event.type){
+                // window closed
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+
+                // key pressed
+                case sf::Event::MouseButtonPressed:
+                    if(clearColor == clearBlack){
+                        clearColor = clearGray;
+                    } else {
+                        clearColor = clearBlack;
+                    }
+                    break;
+
+                // we don't process other types of events
+                default:
+                    break;
+            }
         }
 
         float deltaTime = clock.restart().asSeconds();
@@ -131,7 +152,7 @@ int main()
         movingRectangle.update(deltaTime);
         square.update(deltaTime);
 
-        window.clear();
+        window.clear(clearColor);
         window.draw(shape);
         window.draw(movingRectangle);
         window.draw(text);
